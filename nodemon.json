@@ -1,0 +1,6 @@
+{
+  "ignore": ["src/client/*", "node_modules"],
+  "watch": ["src"],
+  "exec": "yarn dev:server",
+  "ext": "ts"
+}

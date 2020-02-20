@@ -1,7 +1,9 @@
 import React from 'react';
+import { hot } from 'react-hot-loader';
 
 const App = () => {
-	return <div>Wowee we propped up an app super quick.</div>;
+	return <div>Woweezy we propped up an app super quick.</div>;
 };
 
-export default App;
+declare const module: any;
+export default hot(module)(App);
