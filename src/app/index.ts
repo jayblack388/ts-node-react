@@ -5,6 +5,7 @@ import cors from 'cors';
 import Bundler from 'parcel-bundler';
 import path from 'path';
 
+import { connectDB } from '../lib';
 import routes from './routes';
 
 const { BASE_URL, NODE_ENV, PORT } = process.env;
@@ -18,8 +19,8 @@ const bundler = new Bundler(
 );
 
 bundler.on('bundled', () => {
-	console.log(`======================================`);
-	console.log(`🌎  React App bundled and served at ${bundleURL}`);
+	console.info(`======================================`);
+	console.info(`🌎  React App bundled and served at ${bundleURL}`);
 });
 
 app.use(cors());
@@ -28,7 +29,7 @@ app.use(bodyParser.json());
 app.use(logger('dev'));
 app.use(routes);
 app.use(bundler.middleware());
-
+connectDB();
 // Logger if error is getting missed
 /* app.use((err: any, req: any, res: any, next: any) => {
 	if (err) {

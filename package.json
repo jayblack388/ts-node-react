@@ -8,7 +8,7 @@
 		"build:production": "tsc",
 		"dev:server": "ts-node src/index.ts",
 		"start": "per-env",
-		"start:development": "node .",
+		"start:development": "nodemon .",
 		"prestart:production": "yarn build:production",
 		"start:production": "node .",
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -26,9 +26,11 @@
 	"homepage": "https://github.com/jayblack388/ts-node-react#readme",
 	"dependencies": {
 		"body-parser": "^1.19.0",
+		"colors": "^1.4.0",
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
+		"mongoose": "^5.9.27",
 		"morgan": "^1.9.1",
 		"per-env": "^1.0.2",
 		"react": "^16.12.0",
