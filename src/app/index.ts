@@ -7,10 +7,20 @@ import path from 'path';
 
 import routes from './routes';
 
+const { BASE_URL, NODE_ENV, PORT } = process.env;
+
+const bundleURL =
+	NODE_ENV === 'development' ? `${BASE_URL}:${PORT}` : `${BASE_URL}`;
+
 const app = express();
 const bundler = new Bundler(
 	path.join(__dirname, '../../src/client/index.html')
 );
+
+bundler.on('bundled', () => {
+	console.log(`======================================`);
+	console.log(`🌎  React App bundled and served at ${bundleURL}`);
+});
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
