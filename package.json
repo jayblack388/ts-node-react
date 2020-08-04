@@ -9,7 +9,7 @@
     "dev": "nodemon",
     "dev:server": "ts-node src/index.ts",
     "prestart": "yarn build",
-    "start": "nodemon .",
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
