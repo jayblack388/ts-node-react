@@ -2,8 +2,15 @@ import { Document, model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 interface UserInterfaceBase extends Document {
+	dateCreated: number;
 	email: string;
+	name: {
+		familyName?: string;
+		givenName?: string;
+		name?: string;
+	};
 	password: string;
+	picture?: string;
 }
 export interface UserInterface extends UserInterfaceBase {
 	isCorrectPassword(password: string): Promise<boolean>;
@@ -11,17 +18,24 @@ export interface UserInterface extends UserInterfaceBase {
 
 const userSchema: Schema = new Schema(
 	{
+		dateCreated: { type: Date, default: Date.now },
 		email: {
 			type: String,
 			required: true,
 			unique: true,
 			match: [/.+@.+\..+/, 'Must match an email address!'],
 		},
+		name: {
+			givenName: { type: String, required: false },
+			familyName: { type: String, required: false },
+			name: { type: String, required: false },
+		},
 		password: {
 			type: String,
 			required: true,
 			minlength: 8,
 		},
+		picture: { type: String, required: false },
 	},
 	{
 		toJSON: {
