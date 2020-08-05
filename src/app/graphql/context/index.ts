@@ -38,8 +38,18 @@ export const context = ({ req }: { req: CustomRequest }) => {
 	return req;
 };
 
-export const signToken = ({ _id, email }: UserInterface) => {
-	return jwt.sign({ data: { _id, email } }, TOKEN_SECRET, {
-		expiresIn: TOKEN_EXPIRATION,
-	});
+export const signToken = ({
+	_id,
+	dateCreated,
+	email,
+	name,
+	picture,
+}: UserInterface) => {
+	return jwt.sign(
+		{ data: { _id, dateCreated, email, name, picture } },
+		TOKEN_SECRET,
+		{
+			expiresIn: TOKEN_EXPIRATION,
+		}
+	);
 };

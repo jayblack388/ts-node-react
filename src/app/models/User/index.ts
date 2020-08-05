@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 interface UserInterfaceBase extends Document {
 	dateCreated: number;
 	email: string;
-	name: {
+	name?: {
 		familyName?: string;
 		givenName?: string;
 		name?: string;

@@ -5,10 +5,17 @@ export const typeDefs = gql`
 		token: ID!
 		user: User
 	}
+	type Name {
+		familyName: String
+		givenName: String
+		name: String
+	}
 	type User {
 		_id: ID
-		username: String
+		dateCreated: Int
 		email: String
+		name: Name
+		picture: String
 	}
 	type Mutation {
 		addUser(email: String!, password: String!): Auth
