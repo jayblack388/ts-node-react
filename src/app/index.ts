@@ -19,7 +19,7 @@ const apolloSever = new ApolloServer({ context, resolvers, typeDefs });
 const bundleURL =
 	NODE_ENV === 'development' ? `${BASE_URL}:${PORT}` : `${BASE_URL}`;
 const bundler = new Bundler(
-	path.join(__dirname, '../../src/client/index.html')
+	path.join(__dirname, '../../src/client/public/index.html')
 );
 
 apolloSever.applyMiddleware({ app });
