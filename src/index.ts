@@ -11,11 +11,11 @@ if (db) {
 		console.info('\n======================================');
 		console.info('💫  Connected to MongoDB');
 		app.listen(PORT, () => {
-			console.log(`======================================`);
-			console.log(`🔮  GraphQL server located at ${apolloSeverURL}`);
-			console.log(`======================================`);
-			console.log(`🚀  Server is running on port: ${PORT}`);
-			console.log(`======================================`);
+			console.info(`======================================`);
+			console.info(`🔮  GraphQL server located at ${apolloSeverURL}`);
+			console.info(`======================================`);
+			console.info(`🚀  Server is running on port: ${PORT}`);
+			console.info(`======================================`);
 		});
 	});
 }

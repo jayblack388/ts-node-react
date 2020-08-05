@@ -7,14 +7,14 @@ import logger from 'morgan';
 import path from 'path';
 
 import { connectDB } from '../lib';
-import { resolvers, typeDefs } from './graphql';
+import { context, resolvers, typeDefs } from './graphql';
 import routes from './routes';
 
 const { BASE_URL, NODE_ENV, PORT } = process.env;
 
 const app = express();
 
-const apolloSever = new ApolloServer({ resolvers, typeDefs });
+const apolloSever = new ApolloServer({ context, resolvers, typeDefs });
 
 const bundleURL =
 	NODE_ENV === 'development' ? `${BASE_URL}:${PORT}` : `${BASE_URL}`;

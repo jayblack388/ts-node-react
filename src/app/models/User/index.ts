@@ -1,13 +1,16 @@
-import { Schema, model } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
 
-export const userSchema = new Schema(
+interface UserInterfaceBase extends Document {
+	email: string;
+	password: string;
+}
+export interface UserInterface extends UserInterfaceBase {
+	isCorrectPassword(password: string): Promise<boolean>;
+}
+
+const userSchema: Schema = new Schema(
 	{
-		username: {
-			type: String,
-			required: true,
-			unique: true,
-			trim: true,
-		},
 		email: {
 			type: String,
 			required: true,
@@ -17,7 +20,7 @@ export const userSchema = new Schema(
 		password: {
 			type: String,
 			required: true,
-			minlength: 5,
+			minlength: 8,
 		},
 	},
 	{
@@ -27,6 +30,21 @@ export const userSchema = new Schema(
 	}
 );
 
-const User = model('User', userSchema);
+// set up pre-save middleware to create password
+userSchema.pre<UserInterface>('save', async function (next) {
+	if (this.isNew || this.isModified('password')) {
+		const saltRounds = 10;
+		this.password = await bcrypt.hash(this.password, saltRounds);
+	}
+
+	next();
+});
+
+// compare the incoming password with the hashed password
+userSchema.methods.isCorrectPassword = async function (password: string) {
+	return bcrypt.compare(password, this.password);
+};
+
+export const User = model<UserInterface>('User', userSchema);
 
 export default User;

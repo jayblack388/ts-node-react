@@ -1,8 +1,16 @@
+// import { IResolvers } from 'apollo-server-express';
+import { Request } from 'express';
 import jwt from 'jsonwebtoken';
+
+import { UserInterface } from '../../models';
+
+interface CustomRequest extends Request {
+	user: any;
+}
 
 const { TOKEN_EXPIRATION, TOKEN_SECRET } = process.env;
 
-export const context = ({ req }) => {
+export const context = ({ req }: { req: CustomRequest }) => {
 	// allows token to be sent via req.body, req.query, or headers
 	let token = req.body.token || req.query.token || req.headers.authorization;
 
@@ -18,17 +26,20 @@ export const context = ({ req }) => {
 
 	try {
 		// decode and attach user data to request object
-		const { data } = jwt.verify(token, TOKEN_SECRET, {
+		const result = jwt.verify(token, TOKEN_SECRET, {
 			maxAge: TOKEN_EXPIRATION,
 		});
-		req.user = data;
+		req.user = result;
 	} catch {
-		console.log('Invalid token');
+		console.error('Invalid token');
 	}
 
 	// return updated request object
 	return req;
 };
 
-export const signToken = (data) =>
-	jwt.sign({ data }, TOKEN_SECRET, { expiresIn: TOKEN_EXPIRATION });
+export const signToken = ({ _id, email }: UserInterface) => {
+	return jwt.sign({ data: { _id, email } }, TOKEN_SECRET, {
+		expiresIn: TOKEN_EXPIRATION,
+	});
+};
