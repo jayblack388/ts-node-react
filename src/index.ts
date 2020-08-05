@@ -1,18 +1,20 @@
 import { config } from 'dotenv';
 config();
-import app from './app';
+import app, { apolloSeverURL } from './app';
 import { db, printLogo } from './lib';
 
-const port = process.env.PORT || 5000;
+const { PORT } = process.env;
 
 if (db) {
 	db.once('open', () => {
 		printLogo();
 		console.info('\n======================================');
 		console.info('💫  Connected to MongoDB');
-		app.listen(port, () => {
+		app.listen(PORT, () => {
 			console.log(`======================================`);
-			console.log(`🚀  Server is running on port: ${port}`);
+			console.log(`🔮  GraphQL server located at ${apolloSeverURL}`);
+			console.log(`======================================`);
+			console.log(`🚀  Server is running on port: ${PORT}`);
 			console.log(`======================================`);
 		});
 	});
