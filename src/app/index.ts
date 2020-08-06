@@ -1,26 +1,28 @@
-import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
 import bodyParser from 'body-parser';
-import logger from 'morgan';
-import cors from 'cors';
 import Bundler from 'parcel-bundler';
+import cors from 'cors';
+import express from 'express';
+import logger from 'morgan';
 import path from 'path';
 
+import { connectDB } from '../lib';
+import { context, resolvers, typeDefs } from './graphql';
 import routes from './routes';
 
 const { BASE_URL, NODE_ENV, PORT } = process.env;
 
+const app = express();
+
+const apolloSever = new ApolloServer({ context, resolvers, typeDefs });
+
 const bundleURL =
 	NODE_ENV === 'development' ? `${BASE_URL}:${PORT}` : `${BASE_URL}`;
-
-const app = express();
 const bundler = new Bundler(
-	path.join(__dirname, '../../src/client/index.html')
+	path.join(__dirname, '../../src/client/public/index.html')
 );
 
-bundler.on('bundled', () => {
-	console.log(`======================================`);
-	console.log(`🌎  React App bundled and served at ${bundleURL}`);
-});
+apolloSever.applyMiddleware({ app });
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,12 +31,13 @@ app.use(logger('dev'));
 app.use(routes);
 app.use(bundler.middleware());
 
-// Logger if error is getting missed
-/* app.use((err: any, req: any, res: any, next: any) => {
-	if (err) {
-		console.log('This is the error ->', err);
-	}
-	next(err);
-}); */
+bundler.on('bundled', () => {
+	console.info(`======================================`);
+	console.info(`🌎  React App bundled and served at ${bundleURL}`);
+});
+
+connectDB();
+
+export const apolloSeverURL = `${bundleURL}${apolloSever.graphqlPath}`;
 
 export default app;
