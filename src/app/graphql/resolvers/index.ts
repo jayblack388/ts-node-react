@@ -1,8 +1,26 @@
 import { AuthenticationError, IResolvers } from 'apollo-server-express';
+import { GraphQLScalarType } from 'graphql';
+import { Kind } from 'graphql/language';
 import { User } from '../../models';
 import { signToken } from '../context';
 
 export const resolvers: IResolvers = {
+	Date: new GraphQLScalarType({
+		name: 'Date',
+		description: 'Custom Date Scalar',
+		parseLiteral(ast) {
+			if (ast.kind === Kind.INT) {
+				return new Date(ast.value);
+			}
+			return null;
+		},
+		parseValue(value) {
+			return new Date(value);
+		},
+		serialize(value) {
+			return value.getTime();
+		},
+	}),
 	Mutation: {
 		addUser: async (__, args) => {
 			const user = await User.create(args);

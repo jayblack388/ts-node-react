@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 
 export const typeDefs = gql`
+	scalar Date
 	type Auth {
 		token: ID!
 		user: User
@@ -12,7 +13,7 @@ export const typeDefs = gql`
 	}
 	type User {
 		_id: ID
-		dateCreated: Int
+		dateCreated: Date
 		email: String
 		name: Name
 		picture: String
