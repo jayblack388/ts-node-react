@@ -1,5 +1,5 @@
 {
-	"name": "ts-node-react",
+	"name": "merndat",
 	"version": "1.0.0",
 	"description": "A Typescript Node/React Template for quick starts",
 	"main": "dist/index.js",
@@ -15,15 +15,15 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/jayblack388/ts-node-react.git"
+		"url": "git+https://github.com/jayblack388/merndat.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/jayblack388/ts-node-react/issues"
+		"url": "https://github.com/jayblack388/merndat/issues"
 	},
-	"homepage": "https://github.com/jayblack388/ts-node-react#readme",
+	"homepage": "https://github.com/jayblack388/merndat#readme",
 	"dependencies": {
 		"@apollo/client": "^3.1.2",
 		"apollo-server-express": "^2.16.1",
