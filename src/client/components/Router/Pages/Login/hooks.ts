@@ -1,17 +1,17 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 
 import { Auth, LOGIN_USER } from '../../../../Apollo';
 
 export const useComponentLogic = () => {
+	const [authLoading, setAuthLoading] = useState(false);
 	const [formState, setFormState] = useState({
 		email: '',
 		password: '',
 	});
 	const [login, { data, error, loading }] = useMutation(LOGIN_USER);
-	console.log('loading:', loading);
-	console.log('error:', error);
-	console.log('data:', data);
+	let history = useHistory();
 
 	// update state based on form input changes
 	const handleChange = useCallback(
@@ -30,6 +30,7 @@ export const useComponentLogic = () => {
 	const handleFormSubmit = useCallback(
 		(event) => {
 			event.preventDefault();
+			setAuthLoading(true);
 			login({
 				variables: { ...formState },
 			});
@@ -42,12 +43,27 @@ export const useComponentLogic = () => {
 		[formState, login, setFormState]
 	);
 
-	// Auth.login(data.login.token);
+	const redirectCallback = useCallback(() => {
+		history.push('/');
+		setAuthLoading(false);
+	}, [history, setAuthLoading]);
+
+	useEffect(() => {
+		if (!loading) {
+			if (data?.login.token) {
+				Auth.login(data.login.token, redirectCallback);
+			}
+			if (error?.message) {
+				setAuthLoading(false);
+			}
+		}
+	}, [data, error, loading, setAuthLoading]);
 
 	return {
 		error,
 		formState,
 		handleChange,
 		handleFormSubmit,
+		loading: loading && authLoading,
 	};
 };

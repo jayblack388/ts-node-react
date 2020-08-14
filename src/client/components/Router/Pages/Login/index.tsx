@@ -8,8 +8,11 @@ export const Login = () => {
 		formState: { password, email },
 		handleChange,
 		handleFormSubmit,
+		loading,
 	} = useComponentLogic();
-	return (
+	return loading ? (
+		<main>Loading...</main>
+	) : (
 		<main className='flex-row justify-center mb-4'>
 			<div className='col-12 col-md-6'>
 				<div className='card'>
