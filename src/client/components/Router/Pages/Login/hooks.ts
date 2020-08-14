@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
-import { Auth, LOGIN_USER } from '../../../Apollo';
+import { Auth, LOGIN_USER } from '../../../../Apollo';
 
 export const useComponentLogic = () => {
 	const [{ email, password }, setFormState] = useState({
 		email: '',
 		password: '',
 	});
-	const [login, { error }] = useMutation(LOGIN_USER);
+	const [login, { data, error, loading }] = useMutation(LOGIN_USER);
 
 	// update state based on form input changes
 	const handleChange = (event) => {
@@ -21,26 +21,27 @@ export const useComponentLogic = () => {
 	};
 
 	// submit form
-	const handleFormSubmit = async (event) => {
+	const handleFormSubmit = (event) => {
 		console.log('event:', event);
-		event.preventDefault();
+		// event.preventDefault();
 
-		try {
-			const { data } = await login({
-				variables: { email, password },
-			});
-			console.log('data:', data);
+		login({
+			variables: { email, password },
+		});
+		console.log('error:', error);
+		console.log('loading:', loading);
+		console.log('data:', data);
 
-			// clear form values
-			setFormState({
-				email: '',
-				password: '',
-			});
+		// clear form values
+		setFormState({
+			email: '',
+			password: '',
+		});
 
-			Auth.login(data.login.token);
-		} catch (e) {
-			console.error(e);
-		}
+		// Auth.login(data.login.token);
+		// } catch (e) {
+		// 	console.error(e);
+		// }
 	};
 
 	return {

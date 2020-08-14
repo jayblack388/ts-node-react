@@ -14,15 +14,28 @@ const { BASE_URL, NODE_ENV, PORT } = process.env;
 
 const app = express();
 
-const apolloSever = new ApolloServer({ context, resolvers, typeDefs });
+const engine = {
+	reportSchema: true,
+	variant: 'current',
+};
+
+const apolloSever = new ApolloServer({
+	context,
+	engine,
+	resolvers,
+	typeDefs,
+});
 
 const bundleURL =
 	NODE_ENV === 'development' ? `${BASE_URL}:${PORT}` : `${BASE_URL}`;
 const bundler = new Bundler(
-	path.join(__dirname, '../../src/client/public/index.html')
+	path.join(__dirname, '../../src/client/public/index.html'),
+	{ logLevel: 1 }
 );
 
-apolloSever.applyMiddleware({ app });
+const gqlPath = '/__graphql';
+
+apolloSever.applyMiddleware({ app, path: gqlPath });
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -32,8 +45,8 @@ app.use(routes);
 app.use(bundler.middleware());
 
 bundler.on('bundled', () => {
-	console.info(`======================================`);
 	console.info(`🌎  React App bundled and served at ${bundleURL}`);
+	console.info(`============================================================================================`);
 });
 
 connectDB();

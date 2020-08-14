@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
-import { Auth, ADD_USER } from '../../../Apollo';
+import { Auth, ADD_USER } from '../../../../Apollo';
 
 export const useComponentLogic = () => {
 	const [{ email, password }, setFormState] = useState({

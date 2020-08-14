@@ -1,7 +1,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 
-import { ApolloProvider } from '../Apollo';
+import { ApolloProvider } from '../../Apollo';
 import Router from '../Router';
 
 const App = () => {
