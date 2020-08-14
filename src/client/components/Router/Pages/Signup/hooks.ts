@@ -11,7 +11,7 @@ export const useComponentLogic = () => {
 	});
 	const [addUser, { data, error, loading }] = useMutation(ADD_USER);
 	const { authLoading, setAuthLoading } = useAuth(
-		data?.login.token,
+		data?.addUser.token,
 		{
 			error,
 			loading,
