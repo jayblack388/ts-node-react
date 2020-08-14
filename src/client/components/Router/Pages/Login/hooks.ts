@@ -1,18 +1,23 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
 
-import { Auth, LOGIN_USER } from '../../../../Apollo';
+import { LOGIN_USER } from '../../../../Apollo';
+import { useAuth } from '../../../../hooks';
 
 export const useComponentLogic = () => {
-	const [authLoading, setAuthLoading] = useState(false);
 	const [formState, setFormState] = useState({
 		email: '',
 		password: '',
 	});
 	const [login, { data, error, loading }] = useMutation(LOGIN_USER);
-	let history = useHistory();
-
+	const { authLoading, setAuthLoading } = useAuth(
+		data?.login.token,
+		{
+			error,
+			loading,
+		},
+		setFormState
+	);
 	// update state based on form input changes
 	const handleChange = useCallback(
 		(event) => {
@@ -34,30 +39,9 @@ export const useComponentLogic = () => {
 			login({
 				variables: { ...formState },
 			});
-			// clear form values
-			setFormState({
-				email: '',
-				password: '',
-			});
 		},
 		[formState, login, setFormState]
 	);
-
-	const redirectCallback = useCallback(() => {
-		history.push('/');
-		setAuthLoading(false);
-	}, [history, setAuthLoading]);
-
-	useEffect(() => {
-		if (!loading) {
-			if (data?.login.token) {
-				Auth.login(data.login.token, redirectCallback);
-			}
-			if (error?.message) {
-				setAuthLoading(false);
-			}
-		}
-	}, [data, error, loading, setAuthLoading]);
 
 	return {
 		error,

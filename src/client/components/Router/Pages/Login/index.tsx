@@ -10,6 +10,7 @@ export const Login = () => {
 		handleFormSubmit,
 		loading,
 	} = useComponentLogic();
+	console.error(error);
 	return loading ? (
 		<main>Loading...</main>
 	) : (
