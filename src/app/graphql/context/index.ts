@@ -40,13 +40,14 @@ export const context = ({ req }: { req: CustomRequest }) => {
 
 export const signToken = ({
 	_id,
-	dateCreated,
+	createdAt,
 	email,
 	name,
 	picture,
+	updatedAt,
 }: UserInterface) => {
 	return jwt.sign(
-		{ data: { _id, dateCreated, email, name, picture } },
+		{ data: { _id, createdAt, email, name, picture, updatedAt } },
 		TOKEN_SECRET,
 		{
 			expiresIn: TOKEN_EXPIRATION,

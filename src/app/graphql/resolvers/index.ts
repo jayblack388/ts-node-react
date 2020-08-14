@@ -12,7 +12,7 @@ export const resolvers: IResolvers = {
 			if (ast.kind === Kind.INT) {
 				return new Date(ast.value);
 			}
-			return null;
+			return undefined;
 		},
 		parseValue(value) {
 			return new Date(value);

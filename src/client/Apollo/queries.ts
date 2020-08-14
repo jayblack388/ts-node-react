@@ -4,12 +4,13 @@ export const QUERY_ME = gql`
 	{
 		me {
 			_id
-			dateCreated
+			createdAt
 			email
 			name {
 				name
 			}
 			picture
+			updatedAt
 		}
 	}
 `;

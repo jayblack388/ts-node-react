@@ -2,7 +2,7 @@ import { Document, model, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 interface UserInterfaceBase extends Document {
-	dateCreated: number;
+	createdAt: Date;
 	email: string;
 	name?: {
 		familyName?: string;
@@ -11,6 +11,7 @@ interface UserInterfaceBase extends Document {
 	};
 	password: string;
 	picture?: string;
+	updatedAt: Date;
 }
 export interface UserInterface extends UserInterfaceBase {
 	isCorrectPassword(password: string): Promise<boolean>;
@@ -18,7 +19,6 @@ export interface UserInterface extends UserInterfaceBase {
 
 const userSchema: Schema = new Schema(
 	{
-		dateCreated: { type: Date, default: Date.now },
 		email: {
 			type: String,
 			required: true,
@@ -38,6 +38,7 @@ const userSchema: Schema = new Schema(
 		picture: { type: String, required: false },
 	},
 	{
+		timestamps: true,
 		toJSON: {
 			virtuals: true,
 		},

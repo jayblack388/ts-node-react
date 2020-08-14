@@ -13,10 +13,11 @@ export const typeDefs = gql`
 	}
 	type User {
 		_id: ID
-		dateCreated: Date
+		createdAt: Date
 		email: String
 		name: Name
 		picture: String
+		updatedAt: Date
 	}
 	type Mutation {
 		addUser(email: String!, password: String!): Auth
