@@ -15,6 +15,5 @@ const logo = String.raw`
 `;
 
 export const printLogo = () => {
-  console.clear();
 	console.log(colors.rainbow(logo));
 };
