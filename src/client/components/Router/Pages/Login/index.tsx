@@ -4,13 +4,16 @@ import { useComponentLogic } from './hooks';
 
 export const Login = () => {
 	const {
-		email,
 		error,
+		formState: { password, email },
 		handleChange,
 		handleFormSubmit,
-		password,
+		loading,
 	} = useComponentLogic();
-	return (
+	console.error(error);
+	return loading ? (
+		<main>Loading...</main>
+	) : (
 		<main className='flex-row justify-center mb-4'>
 			<div className='col-12 col-md-6'>
 				<div className='card'>
@@ -39,7 +42,7 @@ export const Login = () => {
 								Submit
 							</button>
 						</form>
-						{error && <div>Login failed</div>}
+						{error && <div>{error.message}</div>}
 					</div>
 				</div>
 			</div>

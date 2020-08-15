@@ -8,14 +8,14 @@ const { PORT } = process.env;
 if (db) {
 	db.once('open', () => {
 		printLogo();
-		console.info('\n======================================');
+		console.info('============================================================================================');
 		console.info('💫  Connected to MongoDB');
 		app.listen(PORT, () => {
-			console.info(`======================================`);
-			console.info(`🔮  GraphQL server located at ${apolloSeverURL}`);
-			console.info(`======================================`);
+			console.info(`============================================================================================`);
 			console.info(`🚀  Server is running on port: ${PORT}`);
-			console.info(`======================================`);
+			console.info(`============================================================================================`);
+			console.info(`🔮  GraphQL server located at ${apolloSeverURL}`);
+			console.info(`============================================================================================`);
 		});
 	});
 }

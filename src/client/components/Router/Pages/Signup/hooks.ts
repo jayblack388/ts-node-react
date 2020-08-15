@@ -1,15 +1,23 @@
 import { useCallback, useState } from 'react';
 import { useMutation } from '@apollo/client';
 
-import { Auth, ADD_USER } from '../../../Apollo';
+import { ADD_USER } from '../../../../Apollo';
+import { useAuth } from '../../../../hooks';
 
 export const useComponentLogic = () => {
-	const [{ email, password }, setFormState] = useState({
+	const [formState, setFormState] = useState({
 		email: '',
 		password: '',
 	});
-	const [addUser, { error }] = useMutation(ADD_USER);
-
+	const [addUser, { data, error, loading }] = useMutation(ADD_USER);
+	const { authLoading, setAuthLoading } = useAuth(
+		data?.addUser.token,
+		{
+			error,
+			loading,
+		},
+		setFormState
+	);
 	// update state based on form input changes
 	const handleChange = useCallback(
 		(event) => {
@@ -25,27 +33,25 @@ export const useComponentLogic = () => {
 
 	// submit form
 	const handleFormSubmit = useCallback(
-		async (event) => {
+		(event) => {
 			event.preventDefault();
-
+			setAuthLoading(true);
 			try {
-				// execute addUser mutation and pass in variable data from form
-				const { data } = await addUser({
-					variables: { email, password },
+				addUser({
+					variables: { ...formState },
 				});
-				Auth.login(data.addUser.token);
-			} catch (e) {
-				console.error(e);
+			} catch (error) {
+				console.error(error);
 			}
 		},
-		[addUser, email, password, setFormState]
+		[addUser, formState, setAuthLoading, setFormState]
 	);
 
 	return {
-		email,
 		error,
+		formState,
 		handleChange,
 		handleFormSubmit,
-		password,
+		loading: loading && authLoading,
 	};
 };

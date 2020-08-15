@@ -17,7 +17,7 @@ class AuthService {
 	// check if the token has expired
 	isTokenExpired(token) {
 		try {
-			const decoded = decode(token);
+			const decoded: { exp: number } = decode(token);
 			if (decoded.exp < Date.now() / 1000) {
 				return true;
 			} else {
@@ -35,11 +35,11 @@ class AuthService {
 	}
 
 	// set token to localStorage and reload page to homepage
-	login(idToken) {
+	login(idToken, redirect = () => {}) {
 		// Saves user token to localStorage
 		localStorage.setItem('id_token', idToken);
 
-		window.location.assign('/');
+		redirect();
 	}
 
 	// clear token from localStorage and force logout with reload

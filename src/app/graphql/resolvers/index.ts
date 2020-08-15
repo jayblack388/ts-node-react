@@ -12,7 +12,7 @@ export const resolvers: IResolvers = {
 			if (ast.kind === Kind.INT) {
 				return new Date(ast.value);
 			}
-			return null;
+			return undefined;
 		},
 		parseValue(value) {
 			return new Date(value);
@@ -23,21 +23,40 @@ export const resolvers: IResolvers = {
 	}),
 	Mutation: {
 		addUser: async (__, args) => {
-			const user = await User.create(args);
-			const token = signToken(user);
-			return { token, user };
+			try {
+				const user = await User.create(args);
+				if (!user) {
+					throw new AuthenticationError(
+						'Something went wrong, user is unavailable'
+					);
+				}
+				const token = signToken(user);
+				return { token, user };
+			} catch (error) {
+				console.error('src/app/graphql/resolvers/index.ts:35', error);
+				if (error.code === 11000) {
+					throw new AuthenticationError('User already exists');
+				} else {
+					throw new AuthenticationError(error.message);
+				}
+			}
 		},
 		login: async (__, { email, password }) => {
-			const user = await User.findOne({ email });
-			if (!user) {
+			try {
+				const user = await User.findOne({ email });
+				if (!user) {
+					throw new AuthenticationError('Incorrect credentials');
+				}
+				const correctPw = await user.isCorrectPassword(password);
+				if (!correctPw) {
+					throw new AuthenticationError('Incorrect credentials');
+				}
+				const token = signToken(user);
+				return { token, user };
+			} catch (error) {
+				console.error('src/app/graphql/resolvers/index.ts:53', error);
 				throw new AuthenticationError('Incorrect credentials');
 			}
-			const correctPw = await user.isCorrectPassword(password);
-			if (!correctPw) {
-				throw new AuthenticationError('Incorrect credentials');
-			}
-			const token = signToken(user);
-			return { token, user };
 		},
 	},
 	Query: {
