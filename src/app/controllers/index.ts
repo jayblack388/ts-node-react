@@ -1,1 +1,1 @@
-export { dataController } from './dataController';
+export { googleController } from './googleController';
